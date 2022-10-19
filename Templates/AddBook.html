@@ -8,15 +8,15 @@
     {% endblock %} {% block content %}
     <form action="" method="POST">
         <label>Book ID : </label>
-        <input name="BookId" type="text">
+        <input name="BookId" type="text" placeholder="Enter book ID">
         <label>Book Name : </label>
-        <input name="NameBook" type="text">
+        <input name="NameBook" type="text" placeholder="Enter name book">
         <label>Author : </label>
-        <input name="Author" type="text"><br><br>
+        <input name="Author" type="text" placeholder="Enter name"><br><br>
         <label>YearPublished : </label>
-        <input name="YearPublished" type="number">
+        <input name="YearPublished" type="number" placeholder="Enter Year Published" >
         <label>Type : </label>
-        <input name = "Type" type = number>
+        <input name = "Type" type = number placeholder="Enter type">
         <button type="submit">Add Book</button>
     </form>
     {% endblock %}

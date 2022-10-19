@@ -10,7 +10,7 @@ block head %} {{ super() }}
 <a href="/addBook/"><button type="button" class="btn btn-secondary">Add new book</button></a><br><br>
 <form action="" method="POST">
   <label>Book Name : </label>
-  <input name="SerachBook"  type="text">
+  <input name="SerachBook"  type="text" placeholder="Enter book name">
   <a href="/Book/{{bookname}}"><button  methods="POST" class="btn btn-success" Type="submit">Search book</button></a>
   </form>
 <p class="important"></p>

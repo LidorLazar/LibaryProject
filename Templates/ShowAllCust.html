@@ -7,10 +7,10 @@ head %} {{ super() }}
 </style>
 {% endblock %} {% block content %}
 <h1>All customers in library</h1>
-<a href="/addCustomer/"><button type="button" class="btn btn-secondary">Add new customer</button></a><br><br>
+<a href="/addCustomer/"><button type="button" class="btn btn-secondary" >Add new customer</button></a><br><br>
 <form action="" method="POST">
 <label>Customer Name : </label>
-<input name="SerachCust"  type="text">
+<input name="SerachCust"  type="text" placeholder="Enter name">
 <a href="/PrintAll/{{customername}}"><button  methods ="POST" class="btn btn-success" Type="submit">Search Customer</button></a>
 </form>
 <p class="important"></p>
