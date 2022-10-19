@@ -1,0 +1,31 @@
+{% extends "layout.html" %} {% block title %}Lazar libaray{% endblock %} {% block
+head %} {{ super() }}
+<style type="text/css">
+  .important {
+    color: #336699;
+  }
+</style>
+{% endblock %} {% block content %}
+<h1>All customers in library</h1>
+{%- for cust in PrintAllCustomer %} 
+  {% if cust.Name == customername  %}
+  <div class="row row-cols-1 row-cols-md-4 g-4">
+    <div class="col">
+        <div class="card">
+          <img
+            src="https://picsum.photos/20{{ cust.CusomerID}}"
+            class="card-img-top"
+          />
+          <div class="card-body">
+            <h5 class="card-title">Custoemr ID : {{cust.CusomerID}}</h5>
+            <p class="card-text">Customer name : {{cust.Name}}</p>
+            <p class="card-text">Customer age : {{cust.Age}}</p>
+            <p class="card-text">Customer city : {{cust.City}}</p>
+            <a class="btn btn-danger" href="/deleteCustomer/{{cust.CusomerID}}">Delete</a>
+          </div>
+        </div>
+      </div>
+  {% endif %}
+{% endfor %}
+</div>
+{% endblock %}

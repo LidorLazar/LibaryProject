@@ -1,0 +1,35 @@
+{% extends "layout.html" %} {% block title %}Lazar libaray{% endblock %} {% block
+head %} {{ super() }}
+<style type="text/css">
+  .important {
+    color: #336699;
+  }
+</style>
+{% endblock %} {% block content %}
+<h1>All customers in library</h1>
+<a href="/addCustomer/"><button type="button" class="btn btn-secondary">Add new customer</button></a><br><br>
+<form action="" method="POST">
+<label>Customer Name : </label>
+<input name="SerachCust"  type="text">
+<a href="/PrintAll/{{customername}}"><button  methods ="POST" class="btn btn-success" Type="submit">Search Customer</button></a>
+</form>
+<p class="important"></p>
+<div class="row row-cols-1 row-cols-md-4 g-4">
+  {%- for cust in PrintAllCustomer %}
+  <div class="col">
+    <div class="card">
+      <img
+        src="https://picsum.photos/20{{ cust.CusomerID}}"
+        class="card-img-top"
+      />
+      <div class="card-body">
+        <h5 class="card-title">ID customer : {{ cust.CusomerID}}</h5>
+        <p class="card-text">Customer name : {{ cust.Name}}</p>
+        <a class="btn btn-danger" href="/deleteCustomer/{{ cust.CusomerID}}">Delete</a>
+      </div>
+    </div>
+  </div>
+
+  {% endfor %}
+</div>
+{% endblock %}

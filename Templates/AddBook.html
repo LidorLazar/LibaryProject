@@ -1,0 +1,22 @@
+{% extends "layout.html" %} {% block title %}Lazar libaray{% endblock %} {% block
+    head %} {{ super() }}
+    <style type="text/css">
+      .important {
+        color: #336699;
+      }
+    </style>
+    {% endblock %} {% block content %}
+    <form action="" method="POST">
+        <label>Book ID : </label>
+        <input name="BookId" type="text">
+        <label>Book Name : </label>
+        <input name="NameBook" type="text">
+        <label>Author : </label>
+        <input name="Author" type="text"><br><br>
+        <label>YearPublished : </label>
+        <input name="YearPublished" type="number">
+        <label>Type : </label>
+        <input name = "Type" type = number>
+        <button type="submit">Add Book</button>
+    </form>
+    {% endblock %}

@@ -1,0 +1,32 @@
+{% extends "layout.html" %} {% block title %}Lazar libaray{% endblock %} {%
+    block head %} {{ super() }}
+    <style type="text/css">
+      .important {
+        color: #336699;
+      }
+    </style>
+    {% endblock %} {% block content %}
+    <table class="table table-striped-columns">
+    <h1>All late loans in library</h1>
+      {%- for one_res in results %}
+        <thead>
+          <tr>
+            <th scope="col">Customer Name : </th>
+            <th scope="col">Customer ID : </th>
+            <th scope="col">Book Name : </th>
+            <th scope="col">Loan date : </th>
+            <th scope="col" >Return Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{one_res[4]}}</td>
+            <td>{{one_res[0]}}</td>
+            <td>{{one_res[3]}}</td>
+            <td>{{one_res[2]}}</td>
+            <td>{{one_res[1]}}</td>
+          </tr>  
+        </thead>
+      {% endfor %}
+    {% endblock %}
+    

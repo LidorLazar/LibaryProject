@@ -1,0 +1,35 @@
+{% extends "layout.html" %} {% block title %}Lazar libaray{% endblock %} {%
+  block head %} {{ super() }}
+  <style type="text/css">
+    .important {
+      color: #336699;
+    }
+  </style>
+  {% endblock %} {% block content %}
+  <table class="table table-striped-columns">
+  <h1>All Loans in library</h1>
+  <a class="btn btn-success" href="/AddLoan">Add new Loan</a>
+    {%- for Loan in AllLoanBook %}
+      <thead>
+        <tr>
+          <th scope="col">Loan ID</th>
+          <th scope="col">Customer ID</th>
+          <th scope="col">Book ID</th>
+          <th scope="col">Loan data</th>
+          <th scope="col" >Return Date</th>
+          <th scope="col" >Return</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{Loan.LoansID}}</td>
+          <td>{{Loan.CusomerID}}</td>
+          <td>{{Loan.BookId}}</td>
+          <td>{{Loan.LoanDate}}</td>
+          <td>{{Loan.ReturnDate}}</td>
+          <td><a class="btn btn-danger" href="/ReturnBook/{{Loan.LoansID}}">Delete</a></td>
+        </tr>  
+      </thead>
+    {% endfor %}
+  {% endblock %}
+  

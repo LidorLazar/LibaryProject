@@ -1,0 +1,35 @@
+{% extends "layout.html" %} {% block title %}Lazar libaray{% endblock %} {%
+block head %} {{ super() }}
+<style type="text/css">
+  .important {
+    color: #336699;
+  }
+</style>
+{% endblock %} {% block content %}
+<h1>All books in library</h1>
+<a href="/addBook/"><button type="button" class="btn btn-secondary">Add new book</button></a><br><br>
+<form action="" method="POST">
+  <label>Book Name : </label>
+  <input name="SerachBook"  type="text">
+  <a href="/Book/{{bookname}}"><button  methods="POST" class="btn btn-success" Type="submit">Search book</button></a>
+  </form>
+<p class="important"></p>
+<div class="row row-cols-1 row-cols-md-4 g-4">
+  {%- for book in PrintAllBook %}
+  <div class="col">
+    <div class="card">
+      <img
+        src="https://picsum.photos/20{{book.BookId }}"
+        class="card-img-top"
+      />
+      <div class="card-body">
+        <h5 class="card-title">ID book : {{ book.BookId}}</h5>
+        <p class="card-text">Name book : {{book.NameBook}}</p>
+        <a class="btn btn-danger" href="/deleteBook/{{book.BookId}}">Delete</a>
+      </div>
+    </div>
+  </div>
+
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "layout.html" %} {% block title %}Lazar libaray{% endblock %} {% block
+    head %} {{ super() }}
+    <style type="text/css">
+      .important {
+        color: #336699;
+      }
+    </style>
+    {% endblock %} {% block content %}
+    <form action="" method="POST">
+        <label>Customer Name : </label>
+        <input name="Name" type="text">
+        <label>Customer ID : </label>
+        <input name="ID" type="number">
+        <label>City : </label>
+        <input name="City" type="text">
+        <label>Age : </label>
+        <input name="Age" type="number">
+        <button type="submit">Add customer</button>
+    </form>
+    {% endblock %}
+    

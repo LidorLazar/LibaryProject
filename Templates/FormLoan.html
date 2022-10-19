@@ -1,0 +1,22 @@
+{% extends "layout.html" %} {% block title %}Lazar libaray{% endblock %} {% block
+    head %} {{ super() }}
+    <style type="text/css">
+      .important {
+        color: #336699;
+      }
+    </style>
+    {% endblock %} {% block content %}
+    <form action="" method="POST">
+        <label>Loan ID: </label>
+        <input name="LoansID" type="number">
+        <label>Custmer ID : </label>
+        <input name="CustID" type="text">
+        <label>Book ID : </label>
+        <input name="BookID" type="text"><br><br>
+        <!-- <label>Loan Date : </label>
+        <input name="LoanDate" type="text">
+        <label>Return Date : </label>
+        <input name = "ReturnDate" type = "text"> -->
+        <button type="submit" >Add loan</button>
+    </form>
+    {% endblock %}

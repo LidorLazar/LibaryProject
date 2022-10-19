@@ -1,0 +1,32 @@
+{% extends "layout.html" %} {% block title %}Lazar libaray{% endblock %} {% block
+    head %} {{ super() }}
+    <style type="text/css">
+      .important {
+        color: #336699;
+      }
+    </style>
+    {% endblock %} {% block content %}
+    <h1>Abook</h1>
+    {%- for book in PrintAllBook %} 
+      {% if book.NameBook == bookname  %}
+      <div class="row row-cols-1 row-cols-md-4 g-4">
+        <div class="col">
+            <div class="card">
+              <img
+                src="https://picsum.photos/20{{ book.BookId}}"
+                class="card-img-top"/>
+                <div class="card-body">
+                <h5 class="card-title">ID book : {{book.BookId}}</h5>
+                <p class="card-text">Name book : {{book.NameBook}}</p>
+                <p class="card-text">Name author : {{book.Author}}</p>
+                <p class="card-text">Year Published : {{book.YearPublished}}</p>
+                <p class="card-text">Type : {{book.Type}}</p>
+                <a class="btn btn-danger" href="/deleteBook/{{book.BookId}}">Delete</a>
+              </div>
+            </div>
+          </div>
+      {% endif %}
+    {% endfor %}
+    </div>
+    {% endblock %}
+    
