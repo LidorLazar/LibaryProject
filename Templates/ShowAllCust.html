@@ -23,8 +23,10 @@ head %} {{ super() }}
         class="card-img-top"
       />
       <div class="card-body">
-        <h5 class="card-title">ID customer : {{ cust.CusomerID}}</h5>
-        <p class="card-text">Customer name : {{ cust.Name}}</p>
+        <h5 class="card-text">Customer name : {{cust.Name}}</h5>
+        <p class="card-title">Custoemr ID : {{cust.CusomerID}}</p>
+        <p class="card-text">Customer age : {{cust.Age}}</p>
+        <p class="card-text">Customer city : {{cust.City}}</p>
         <a class="btn btn-danger" href="/deleteCustomer/{{ cust.CusomerID}}">Delete</a>
       </div>
     </div>

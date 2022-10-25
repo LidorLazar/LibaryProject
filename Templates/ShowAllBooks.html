@@ -23,8 +23,11 @@ block head %} {{ super() }}
         class="card-img-top"
       />
       <div class="card-body">
-        <h5 class="card-title">ID book : {{ book.BookId}}</h5>
-        <p class="card-text">Name book : {{book.NameBook}}</p>
+        <h5 class="card-text">Name book : {{book.NameBook}}</h5>
+        <p class="card-title">ID book : {{ book.BookId}}</p>
+        <p class="card-text">Name author : {{book.Author}}</p>
+        <p class="card-text">Year Published : {{book.YearPublished}}</p>
+        <p class="card-text">Type : {{book.Type}}</p>
         <a class="btn btn-danger" href="/deleteBook/{{book.BookId}}">Delete</a>
       </div>
     </div>

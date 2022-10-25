@@ -1,22 +1,20 @@
 {% extends "layout.html" %} {% block title %}Lazar libaray{% endblock %} {% block
-    head %} {{ super() }}
-    <style type="text/css">
-      .important {
-        color: #336699;
-      }
-    </style>
-    {% endblock %} {% block content %}
-    <form action="" method="POST">
-        <label>Loan ID: </label>
-        <input name="LoansID" type="number"  placeholder="Enter loans ID">
-        <label>Custmer ID : </label>
-        <input name="CustID" type="text"  placeholder="Enter custmer ID">
-        <label>Book ID : </label>
-        <input name="BookID" type="text" placeholder="Enter book ID"><br><br>
-        <!-- <label>Loan Date : </label>
-        <input name="LoanDate" type="text">
-        <label>Return Date : </label>
-        <input name = "ReturnDate" type = "text"> -->
-        <button type="submit" >Add loan</button>
-    </form>
-    {% endblock %}
+  head %} {{ super() }}
+  <style type="text/css">
+    .important {
+      color: #336699;
+    }
+  </style>
+  {% endblock %} {% block content %}
+  <form action="" method="POST">
+      <label>Custmer ID : </label>
+      <input name="CustID" type="text"  placeholder="Enter custmer ID"><br><br>
+      <select name="bookname" class="form-select" aria-label="Default select example">
+      <option selected>Open this select a book</option>
+      {%- for book in Onlybook %}
+      <option >{{book.NameBook}}</option>
+      {% endfor %}  
+    </select><br>
+      <button type="submit" >Add loan</button>
+  </form>
+  {% endblock %}

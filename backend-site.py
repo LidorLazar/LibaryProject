@@ -1,4 +1,8 @@
+
 from datetime import datetime, timedelta
+import re
+from tabnanny import check
+from tokenize import Name
 from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 
@@ -19,8 +23,7 @@ class Books(db.Model):
     Type = db.Column('Type',db.Integer)
     BooksToLoans = db.relationship('Loans', backref='books')
 
-    def __init__(self, BookId, NameBook, Author, YearPublished, Type):
-        self.BookId = BookId
+    def __init__(self, NameBook, Author, YearPublished, Type):
         self.NameBook = NameBook.title()
         self.Author = Author.title()
         self.YearPublished = YearPublished
@@ -42,14 +45,14 @@ class Customers(db.Model):
 
 
 class Loans(db.Model):
-    LoansID = db.Column('LoansID', db.String, primary_key=True)
-    CusomerID = db.Column('CusomerID', db.Integer, db.ForeignKey('customers.CusomerID'))
+    LoansID = db.Column('LoansID', db.Integer, primary_key=True)
+    CusomerID = db.Column('CusomerID', db.Integer, db.ForeignKey('customers.CusomerID'), nullable=False)
     BookId = db.Column('BookId', db.Integer, db.ForeignKey('books.BookId'))
-    LoanDate = db.Column('LoanDate', db.String)
-    ReturnDate = db.Column('ReturnDate', db.String)
+    LoanDate = db.Column('LoanDate', db.Date)
+    ReturnDate = db.Column('ReturnDate', db.Date)
+    
 
-    def __init__(self, LoansID, CusomerID, BookId, LoanDate, ReturnDate):
-        self.LoansID = LoansID
+    def __init__(self, CusomerID, BookId, LoanDate, ReturnDate):
         self.CusomerID = CusomerID
         self.BookId = BookId
         self.LoanDate = LoanDate
@@ -59,6 +62,7 @@ class Loans(db.Model):
 # <------------Step 2 bild all function---------->
 @app.route('/')
 def HomePage():
+    """H"""
     return render_template('index.html')
 
 
@@ -79,15 +83,12 @@ def AddCustomer():
 @app.route('/addBook/', methods=['POST', 'GET'])
 def AddBook():
     if request.method == 'POST':
-        if int(request.form['BookId']) >= 1 and 0 < int(request.form['Type']) <= 3:
-            NewBook = Books(BookId = request.form['BookId'], NameBook=request.form['NameBook'],
+        NewBook = Books(NameBook=request.form['NameBook'],
                             Author = request.form['Author'], YearPublished =request.form['YearPublished'],
                             Type = request.form['Type'])
-            db.session.add(NewBook)
-            db.session.commit()
-            return render_template('ShowAllBooks.html')
-        else:
-            return render_template('Eror.html')
+        db.session.add(NewBook)
+        db.session.commit()
+        return render_template('ShowAllBooks.html', PrintAllBook = Books.query.all())
     return render_template('AddBook.html')
 
 @app.route('/PrintAll/<customername>', methods=['GET','POST'])
@@ -119,10 +120,13 @@ def PrintAllBook(bookname=''):
 @app.route("/deleteCustomer/<id>", methods=['DELETE', 'GET'])
 def deleteCustomer(id=0):
         customerID=Customers.query.get(int(id))
-        if customerID:
+        custInLoan=Loans.query.all()
+        for id_cust in custInLoan:
+            return render_template('Eror.html')
+        else: 
             db.session.delete(customerID)
             db.session.commit()
-        return render_template('ShowAllCust.html')
+        return render_template('ShowAllCust.html', PrintAllCustomer = Customers.query.all())
 
 
 @app.route("/deleteBook/<id>",methods=['DELETE','GET'])
@@ -131,30 +135,35 @@ def deleteBook(id=0):
     if book:
         db.session.delete(book)
         db.session.commit()
-        return render_template('ShowAllBooks.html')
+        return render_template('ShowAllBooks.html', book = Books.query.all())
     return f"the id book doesn't exist"
 
 
 @app.route("/AddLoan/", methods=['GET', 'POST'])
 def AddLoan():
     dayLoan = datetime.utcnow().date()
-    if request.method == 'POST':
-        for book in Books.query.filter_by(BookId=request.form.get("BookID")):
-            if (int(book.BookId) == int(request.form.get("BookID"))):
-                if book.Type == 1:
-                    ReturnDate = dayLoan + timedelta(days=10)
-                elif book.Type == 2:
-                    ReturnDate = dayLoan + timedelta(days=5)
-                else:
-                    ReturnDate = dayLoan + timedelta(days=2)
-            NewLoans = Loans(LoansID=request.form['LoansID'], CusomerID=request.form['CustID'],
-                                BookId=request.form['BookID'], LoanDate=dayLoan,
-                                ReturnDate=ReturnDate)
-            db.session.add(NewLoans)
-            db.session.commit()
-    return render_template('FormLoan.html')
+    id_cust = (request.form.get('CustID'))
+    for id in Customers.query.all():
+        if request.method == 'POST':
+            if (int(id_cust) == id.CusomerID):
+                for book in Books.query.filter_by(NameBook=request.form.get("bookname")):
+                    if book.Type == 1:
+                        ReturnDate = dayLoan + timedelta(days=10)
+                    elif book.Type == 2:
+                        ReturnDate = dayLoan + timedelta(days=5)
+                    else:
+                        ReturnDate = dayLoan + timedelta(days=2)
+                    NewLoans = Loans(CusomerID=request.form['CustID'],
+                                    BookId=book.BookId, LoanDate=dayLoan,
+                                    ReturnDate=ReturnDate)
+                    db.session.add(NewLoans)
+                    db.session.commit()
+                    return render_template('ShowAllLoan.html', AllLoanBook=Loans.query.all()) 
+            else:
+                return render_template('Eror.html')
+    return render_template('FormLoan.html', Onlybook = Books.query.all())
 
-
+ 
 @app.route("/AllLoans/",methods=['GET'])
 def AllLoanBook():
     return render_template('ShowAllLoan.html', AllLoanBook=Loans.query.all())
@@ -166,25 +175,19 @@ def ReturnBook(LoansID=0):
         if int(LoansID) > 0:
             db.session.delete(DeleteFromDB)
             db.session.commit()
-            return "YES"
+            return render_template('ShowAllLoan.html', AllLoanBook=Loans.query.all()) 
         return render_template('Eror.html')
 
 
 @app.route("/lateLoans/", methods = ['GET'])
 def late():
     results = []
-    all_data = db.session.query(Loans, Books, Customers). \
-    select_from(Loans).join(Books).join(Customers).all()
-    for loans,books,customer in all_data:
-        # print('Hi' < str(datetime.utcnow().date()))
-        if loans.ReturnDate > str(datetime.utcnow().date()):
-            print('hi')
-            results.append([loans.CusomerID,loans.ReturnDate,loans.LoanDate, books.NameBook, customer.Name])
-            return render_template('LateLoan.html', results = results)
+    table_loan = Loans.query.all()
+    for date in table_loan:
+        if date.ReturnDate < datetime.utcnow().date():
+            results.append(date)
+    return render_template('LateLoan.html', results = results)
 
-        else:
-            return render_template('LateLoan.html')
-    return render_template('LateLoan.html')
 
 
 if __name__ == '__main__':

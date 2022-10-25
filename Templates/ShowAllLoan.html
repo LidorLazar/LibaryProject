@@ -13,7 +13,7 @@
       <thead>
         <tr>
           <th scope="col">Loan ID</th>
-          <th scope="col">Customer ID</th>
+          <th scope="col">Customer name</th>
           <th scope="col">Book ID</th>
           <th scope="col">Loan data</th>
           <th scope="col" >Return Date</th>
@@ -23,13 +23,13 @@
       <tbody>
         <tr>
           <td>{{Loan.LoansID}}</td>
-          <td>{{Loan.CusomerID}}</td>
+          <td>{{Loan.customers.Name}}</td>
           <td>{{Loan.BookId}}</td>
           <td>{{Loan.LoanDate}}</td>
           <td>{{Loan.ReturnDate}}</td>
           <td><a class="btn btn-danger" href="/ReturnBook/{{Loan.LoansID}}">Delete</a></td>
         </tr>  
       </thead>
-    {% endfor %}
+      {% endfor %}
   {% endblock %}
   
