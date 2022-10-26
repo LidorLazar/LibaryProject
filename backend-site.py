@@ -1,12 +1,18 @@
 
 from datetime import datetime, timedelta
+import re
+from tabnanny import check
+from tokenize import Name
 from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Library.sqlite3'
 app.config['SECRET_KEY'] = "random string"
+
+
 db = SQLAlchemy(app)
+
 
 # <------------Step 1 create DB---------->
 class Books(db.Model):
@@ -23,6 +29,7 @@ class Books(db.Model):
         self.YearPublished = YearPublished
         self.Type = Type
 
+
 class Customers(db.Model):
     CusomerID = db.Column('CusomerID',db.Integer, primary_key=True)
     Name = db.Column('Name', db.String(50))
@@ -36,6 +43,7 @@ class Customers(db.Model):
         self.City = City
         self.Age = Age
 
+
 class Loans(db.Model):
     LoansID = db.Column('LoansID', db.Integer, primary_key=True)
     CusomerID = db.Column('CusomerID', db.Integer, db.ForeignKey('customers.CusomerID'), nullable=False)
@@ -43,11 +51,13 @@ class Loans(db.Model):
     LoanDate = db.Column('LoanDate', db.Date)
     ReturnDate = db.Column('ReturnDate', db.Date)
     
+
     def __init__(self, CusomerID, BookId, LoanDate, ReturnDate):
         self.CusomerID = CusomerID
         self.BookId = BookId
         self.LoanDate = LoanDate
         self.ReturnDate = ReturnDate
+
 
 # <------------Step 2 bild all function---------->
 @app.route('/')
@@ -58,18 +68,17 @@ def HomePage():
 
 @app.route('/addCustomer/', methods=['POST', 'GET'])
 def AddCustomer():
-    id_reserved = Customers.query.all()
-    for id in id_reserved:
-        if request.method == 'POST':
-            if 1 <=  int(request.form['ID']) != id.CusomerID:
-                NewCustomer = Customers(CusomerID=request.form['ID'], Name=request.form['Name'],
-                                        City=request.form['City'], Age=request.form['Age'])
-                db.session.add(NewCustomer)
-                db.session.commit()
-                return render_template('AddCust.html', PrintAllCustomer = Customers.query.all())
-            else:
-                return render_template('Eror.html')
-        return render_template('AddCust.html', PrintAllCustomer = Customers.query.all())
+    if request.method == 'POST':
+        if int(request.form['ID']) >= 1 and 100 >= int(request.form['Age']) >= 1 :
+            NewCustomer = Customers(CusomerID=request.form['ID'], Name=request.form['Name'],
+                                    City=request.form['City'], Age=request.form['Age'])
+            db.session.add(NewCustomer)
+            db.session.commit()
+            return render_template('AddCust.html')
+        else:
+            return render_template('Eror.html')
+    return render_template('AddCust.html')
+
 
 @app.route('/addBook/', methods=['POST', 'GET'])
 def AddBook():
@@ -98,6 +107,8 @@ def PrintAllCustomer(customername=''):
         return render_template('ShowAllCust.html', PrintAllCustomer = Customers.query.all())
 
 
+
+
 @app.route('/Book/<bookname>', methods=['GET'])
 @app.route('/Book/', methods=['GET', 'POST'])
 def PrintAllBook(bookname=''):
@@ -120,6 +131,7 @@ def deleteCustomer(id=0):
             db.session.commit()
         return render_template('ShowAllCust.html', PrintAllCustomer = Customers.query.all())
 
+
 @app.route("/deleteBook/<id>",methods=['DELETE','GET'])
 def deleteBook(id=0):
     book = Books.query.get(id)
@@ -128,6 +140,7 @@ def deleteBook(id=0):
         db.session.commit()
         return render_template('ShowAllBooks.html', book = Books.query.all())
     return f"the id book doesn't exist"
+
 
 @app.route("/AddLoan/", methods=['GET', 'POST'])
 def AddLoan():
@@ -153,9 +166,11 @@ def AddLoan():
                 return render_template('Eror.html')
     return render_template('FormLoan.html', Onlybook = Books.query.all())
 
+ 
 @app.route("/AllLoans/",methods=['GET'])
 def AllLoanBook():
     return render_template('ShowAllLoan.html', AllLoanBook=Loans.query.all())
+
 
 @app.route("/ReturnBook/<LoansID>", methods=['DELETE', 'GET'])
 def ReturnBook(LoansID=0):
@@ -174,7 +189,6 @@ def late():
         if date.ReturnDate < datetime.utcnow().date():
             results.append(date)
     return render_template('LateLoan.html', results = results)
-
 
 if __name__ == '__main__':
     with app.app_context():

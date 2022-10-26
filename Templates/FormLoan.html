@@ -8,7 +8,7 @@
   {% endblock %} {% block content %}
   <form action="" method="POST">
       <label>Custmer ID : </label>
-      <input name="CustID" type="text"  placeholder="Enter custmer ID"><br><br>
+      <input name="CustID" type="text"  placeholder="Enter custmer ID" required><br><br>
       <select name="bookname" class="form-select" aria-label="Default select example">
       <option selected>Open this select a book</option>
       {%- for book in Onlybook %}
